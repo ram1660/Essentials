@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.TPAAcceptEvent;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -46,6 +47,11 @@ public class Commandtpaccept extends EssentialsCommand {
             throw new Exception(tl("requestTimedOut"));
         }
 
+        final TPAAcceptEvent tpaAcceptEvent = new TPAAcceptEvent(user, requester);
+        ess.getServer().getPluginManager().callEvent(tpaAcceptEvent);
+//        if (tpaAcceptEvent.isCancelled()) {
+//            throw new Exception(tl("teleportAcceptingCancelled", user.getDisplayName()));
+//        }
         final Trade charge = new Trade(this.getName(), ess);
         user.sendMessage(tl("requestAccepted"));
         requester.sendMessage(tl("requestAcceptedFrom", user.getDisplayName()));
